@@ -1,7 +1,14 @@
 import { Interface } from 'readline/promises';
 
 import { searchPokemon } from '../services/apiServices.js';
-import { showPokemonAnimation } from '../views/terminal.js';
+import {
+  checkPokemonInCatalogo,
+  addPokemonCatalogo,
+} from '../services/databaseServices.js';
+import { PokemonResumo } from '../types/PokemonResumo.js';
+import { listarCatalogo, showPokemonAnimation } from '../views/terminal.js';
+
+const catalogo: PokemonResumo[] = [];
 
 export async function menuController(
   interfaceConsole: Interface,
@@ -16,7 +23,7 @@ export async function menuController(
     console.log(' INSTRUÇÕES DE USO:');
     console.log(' Busque os seus Pokemons');
     console.log(' 1. Buscar Pokemon ');
-    console.log(' 2. ');
+    console.log(' 2. Listar Pokemons');
     console.log(' 3. ');
     console.log(' 4. Sair');
     console.log('==========================\n');
@@ -31,19 +38,32 @@ export async function menuController(
           'Digite o nome ou ID do Pokemon que deseja buscar: \n',
         );
 
-        const pokemon = await searchPokemon(inputPokemon);
-        if (pokemon instanceof Error) {
-          console.log(pokemon.message);
-          await interfaceConsole.question('Pressione enter para prosseguir...');
+        if (inputPokemon.length === 0) {
           break;
         }
-        await showPokemonAnimation(pokemon);
-        console.log(pokemon);
 
-        await interfaceConsole.question('Pressione enter para prosseguir...');
+        const pokemon =
+          checkPokemonInCatalogo(inputPokemon, catalogo) ??
+          (await searchPokemon(inputPokemon));
+
+        if (!(pokemon instanceof Error)) {
+          await showPokemonAnimation(pokemon);
+          console.log(pokemon);
+          const askUser: string = await interfaceConsole.question(
+            'Deseja adicionar esse Pokemon ao catálogo? (s/n): \n',
+          );
+
+          if (askUser === 's') {
+            console.log(addPokemonCatalogo(pokemon, catalogo));
+          }
+        } else {
+          console.log(pokemon.message);
+        }
+
         break;
       }
       case '2':
+        listarCatalogo(catalogo);
         break;
       case '3':
         break;
@@ -54,6 +74,7 @@ export async function menuController(
       default:
         break;
     }
+    await interfaceConsole.question('Pressione enter para prosseguir...');
     console.clear();
   }
   return running;
