@@ -75,7 +75,9 @@ async function loadImage(pokemon: PokemonResumo) {
   });
 }
 
-export async function listarCatalogo(catalogo: PokemonResumo[]): Promise<void> {
+export async function listarCatalogoTerminal(
+  catalogo: PokemonResumo[],
+): Promise<void> {
   if (catalogo.length === 0) {
     console.log('O catálogo está vazio.');
     return;
@@ -90,7 +92,7 @@ export async function listarCatalogo(catalogo: PokemonResumo[]): Promise<void> {
     setTimeout(() => {
       stopAnimation();
       resolve();
-    }, 5000);
+    }, 4000);
   });
 
   const [images] = await Promise.all([
@@ -107,11 +109,11 @@ export async function listarCatalogo(catalogo: PokemonResumo[]): Promise<void> {
       const imageLines = image.split('\n');
 
       const infoLines = [
-        `Name: ${pokemon.nome}`,
+        `Nome: ${pokemon.nome.toUpperCase()}`,
         `Id: ${String(pokemon.id)}`,
-        `Height: ${String(pokemon.altura)}`,
-        `Weight: ${String(pokemon.peso)}`,
-        `Type: ${pokemon.tipos.join(', ')}`,
+        `Altura: ${String(pokemon.altura * 10)}cm`,
+        `Peso: ${String(pokemon.peso / 10)}kg`,
+        `Tipos: ${pokemon.tipos.join(', ')}`,
       ];
 
       const biggestArrayLength = Math.max(imageLines.length, infoLines.length);
