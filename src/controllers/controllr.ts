@@ -1,14 +1,13 @@
 import { Interface } from 'readline/promises';
 
 import { searchPokemon } from '../services/apiServices.js';
+import CatalogoPokemon from '../types/PokemonCatalogo.js';
 import {
-  checkPokemonInCatalogo,
-  addPokemonCatalogo,
-} from '../services/databaseServices.js';
-import { PokemonResumo } from '../types/PokemonResumo.js';
-import { listarCatalogo, showPokemonAnimation } from '../views/terminal.js';
+  listarCatalogoTerminal,
+  showPokemonAnimation,
+} from '../views/terminal.js';
 
-const catalogo: PokemonResumo[] = [];
+const catalogo = new CatalogoPokemon();
 
 export async function menuController(
   interfaceConsole: Interface,
@@ -24,7 +23,7 @@ export async function menuController(
     console.log(' Busque os seus Pokemons');
     console.log(' 1. Buscar Pokemon ');
     console.log(' 2. Listar Pokemons');
-    console.log(' 3. ');
+    console.log(' 3. Remover Pokemon');
     console.log(' 4. Sair');
     console.log('==========================\n');
 
@@ -43,8 +42,7 @@ export async function menuController(
         }
 
         const pokemon =
-          checkPokemonInCatalogo(inputPokemon, catalogo) ??
-          (await searchPokemon(inputPokemon));
+          catalogo.checar(inputPokemon) ?? (await searchPokemon(inputPokemon));
 
         if (!(pokemon instanceof Error)) {
           await showPokemonAnimation(pokemon);
@@ -54,7 +52,7 @@ export async function menuController(
           );
 
           if (askUser === 's') {
-            console.log(addPokemonCatalogo(pokemon, catalogo));
+            catalogo.adicionar(pokemon);
           }
         } else {
           console.log(pokemon.message);
@@ -64,10 +62,16 @@ export async function menuController(
       }
       case '2':
         console.clear();
-        await listarCatalogo(catalogo);
+        await listarCatalogoTerminal(catalogo.listar());
         break;
-      case '3':
+      case '3': {
+        const inputPokemon: string = await interfaceConsole.question(
+          'Digite o nome ou ID do Pokemon que deseja remover do seu catálogo: \n',
+        );
+
+        catalogo.remover(inputPokemon);
         break;
+      }
       case '4':
         running = false;
         break;
