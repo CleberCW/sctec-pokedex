@@ -4,6 +4,8 @@ import { searchPokemon } from '../services/apiServices.js';
 import CatalogoPokemon from '../types/PokemonCatalogo.js';
 import {
   listarCatalogoTerminal,
+  listarPokemon,
+  showMenu,
   showPokemonAnimation,
 } from '../views/terminal.js';
 
@@ -15,17 +17,7 @@ export async function menuController(
   let running = true;
 
   while (running) {
-    console.log('\n________________________\n ');
-    console.log('=========================');
-    console.log('          POKEDEX        ');
-    console.log('=========================');
-    console.log(' INSTRUÇÕES DE USO:');
-    console.log(' Busque os seus Pokemons');
-    console.log(' 1. Buscar Pokemon ');
-    console.log(' 2. Listar Pokemons');
-    console.log(' 3. Remover Pokemon');
-    console.log(' 4. Sair');
-    console.log('==========================\n');
+    await showMenu();
 
     const respostaOperação = await interfaceConsole.question(
       'Digite a opção escolhida:\n',
@@ -38,6 +30,7 @@ export async function menuController(
         );
 
         if (inputPokemon.length === 0) {
+          console.log('Input inválido');
           break;
         }
 
@@ -46,17 +39,18 @@ export async function menuController(
 
         if (!(pokemon instanceof Error)) {
           await showPokemonAnimation(pokemon);
-          console.log(pokemon);
+          listarPokemon(pokemon);
+
           const askUser: string = await interfaceConsole.question(
             'Deseja adicionar esse Pokemon ao catálogo? (s/n): \n',
           );
 
           if (askUser === 's') {
-            catalogo.adicionar(pokemon);
+            console.log(catalogo.adicionar(pokemon));
           }
-        } else {
-          console.log(pokemon.message);
+          break;
         }
+        console.log(pokemon.message);
 
         break;
       }

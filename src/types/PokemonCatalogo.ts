@@ -7,11 +7,11 @@ export default class CatalogoPokemon {
     const jaExiste = this.pokemons.some((item) => item.id === pokemon.id);
 
     if (jaExiste) {
-      return `[AVISO] ${pokemon.nome} já está no catálogo.`;
+      return `[AVISO] ${pokemon.nome.toUpperCase()} já está no catálogo.`;
     }
 
     this.pokemons.push(pokemon);
-    return `[OK] ${pokemon.nome} adicionado ao catálogo.`;
+    return `[OK] ${pokemon.nome.toUpperCase()} adicionado ao catálogo.`;
   }
 
   checar(pokemonNameOrId: string): PokemonResumo | null {
@@ -36,7 +36,7 @@ export default class CatalogoPokemon {
     );
 
     if (index === -1) {
-      console.log('[AVISO] Nenhum Pokémon encontrado com esse ID.');
+      console.log('[AVISO] Nenhum Pokémon encontrado com esse ID/nome.');
       return;
     }
 
