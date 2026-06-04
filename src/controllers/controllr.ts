@@ -63,7 +63,8 @@ export async function menuController(
         break;
       }
       case '2':
-        listarCatalogo(catalogo);
+        console.clear();
+        await listarCatalogo(catalogo);
         break;
       case '3':
         break;

@@ -60,8 +60,70 @@ export async function showPokemonAnimation(
   console.log(banner);
 }
 
-export function listarCatalogo(catalogo: PokemonResumo[]): void {
-  catalogo.forEach((pokemon) => {
-    console.log(pokemon);
+async function loadImage(pokemon: PokemonResumo) {
+  const response = await fetch(pokemon.img);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch image');
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+
+  return terminalImage.buffer(Buffer.from(arrayBuffer), {
+    height: '35%',
+    preserveAspectRatio: true,
+  });
+}
+
+export async function listarCatalogo(catalogo: PokemonResumo[]): Promise<void> {
+  if (catalogo.length === 0) {
+    console.log('O catálogo está vazio.');
+    return;
+  }
+  const imagePromises = catalogo.map((pokemon) => loadImage(pokemon));
+
+  const animationPromise = new Promise<void>((resolve) => {
+    const stopAnimation = terminalImage.gifFile(gifPath, {
+      height: '50%',
+    });
+
+    setTimeout(() => {
+      stopAnimation();
+      resolve();
+    }, 5000);
+  });
+
+  const [images] = await Promise.all([
+    Promise.all(imagePromises),
+    animationPromise,
+  ]);
+
+  process.stdout.write('\u001Bc\u001B[3J');
+
+  Object.values(catalogo).forEach((pokemon, index) => {
+    try {
+      const image = images[index];
+
+      const imageLines = image.split('\n');
+
+      const infoLines = [
+        `Name: ${pokemon.nome}`,
+        `Id: ${String(pokemon.id)}`,
+        `Height: ${String(pokemon.altura)}`,
+        `Weight: ${String(pokemon.peso)}`,
+        `Type: ${pokemon.tipos.join(', ')}`,
+      ];
+
+      const biggestArrayLength = Math.max(imageLines.length, infoLines.length);
+
+      for (let i = 0; i < biggestArrayLength; i++) {
+        const imageLine = imageLines[i] || '';
+        const infoLine = infoLines[i] || '';
+
+        console.log(imageLine + '    ' + infoLine);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   });
 }
