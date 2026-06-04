@@ -54,6 +54,7 @@ export async function menuController(
       default:
         break;
     }
+    console.clear();
   }
   return running;
 }

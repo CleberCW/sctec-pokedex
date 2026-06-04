@@ -37,6 +37,7 @@ export async function showPokemonAnimation(
   }
 
   const imagePromise = loadImage();
+  console.clear();
 
   await new Promise<void>((resolve) => {
     const stopAnimation = terminalImage.gifFile(gifPath, {
