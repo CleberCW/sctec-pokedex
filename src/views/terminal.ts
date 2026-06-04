@@ -13,6 +13,11 @@ const __dirname = path.dirname(__filename);
 
 const gifPath = path.join(__dirname, '../img/pokeball.gif');
 
+if (process.env.TERM_PROGRAM === 'vscode') {
+  process.env.TERM = 'xterm-256color';
+  delete process.env.TERM_PROGRAM;
+}
+
 export async function showPokemonAnimation(
   pokemon: PokemonResumo,
 ): Promise<void> {
@@ -26,7 +31,7 @@ export async function showPokemonAnimation(
     const arrayBuffer = await response.arrayBuffer();
 
     return terminalImage.buffer(Buffer.from(arrayBuffer), {
-      width: '50%',
+      height: '50%',
       preserveAspectRatio: true,
     });
   }
@@ -35,7 +40,7 @@ export async function showPokemonAnimation(
 
   await new Promise<void>((resolve) => {
     const stopAnimation = terminalImage.gifFile(gifPath, {
-      width: '50%',
+      height: '50%',
     });
 
     setTimeout(() => {
