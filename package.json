@@ -5,7 +5,8 @@
   "main": "src/main.ts",
   "scripts": {
     "dev": "tsx src/main.ts",
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cpy 'src/img/**/*' dist/img",
     "start": "node dist/main.js"
   },
   "type": "module",
@@ -27,6 +28,7 @@
     "@types/node": "^25.9.1",
     "@typescript-eslint/eslint-plugin": "^8.59.4",
     "@typescript-eslint/parser": "^8.59.4",
+    "cpy-cli": "^7.0.0",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
