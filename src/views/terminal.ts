@@ -59,3 +59,9 @@ export async function showPokemonAnimation(
   const banner = figlet.textSync(pokemon.nome);
   console.log(banner);
 }
+
+export function listarCatalogo(catalogo: PokemonResumo[]): void {
+  catalogo.forEach((pokemon) => {
+    console.log(pokemon);
+  });
+}
