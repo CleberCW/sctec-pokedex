@@ -1,0 +1,55 @@
+// EXPERIMENTAL
+
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import figlet from 'figlet';
+import terminalImage from 'terminal-image';
+
+import { PokemonResumo } from '../types/PokemonResumo.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const gifPath = path.join(__dirname, '../img/pokeball.gif');
+
+export async function showPokemonAnimation(
+  pokemon: PokemonResumo,
+): Promise<void> {
+  async function loadImage() {
+    const response = await fetch(pokemon.img);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch image');
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+
+    return terminalImage.buffer(Buffer.from(arrayBuffer), {
+      width: '50%',
+      preserveAspectRatio: true,
+    });
+  }
+
+  const imagePromise = loadImage();
+
+  await new Promise<void>((resolve) => {
+    const stopAnimation = terminalImage.gifFile(gifPath, {
+      width: '50%',
+    });
+
+    setTimeout(() => {
+      stopAnimation();
+      resolve();
+    }, 4000);
+  });
+
+  process.stdout.write('\u001Bc\u001B[3J');
+
+  const image = await imagePromise;
+
+  console.log(image);
+
+  const banner = figlet.textSync(pokemon.nome);
+  console.log(banner);
+}
