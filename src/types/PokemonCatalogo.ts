@@ -40,7 +40,9 @@ export default class CatalogoPokemon {
       return;
     }
 
+    const pokemonName = this.pokemons[index].nome;
+
     this.pokemons.splice(index, 1);
-    console.log('[OK] Pokémon removido do catálogo.');
+    console.log(`[OK] ${pokemonName.toUpperCase()} removido do catálogo.`);
   }
 }
