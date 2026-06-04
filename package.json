@@ -1,0 +1,39 @@
+{
+  "name": "sctec-pokedex",
+  "version": "1.0.0",
+  "description": "Pokedesk project for the SCTEC Node Backend Developer course (M1S08) graded assignment.",
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CleberCW/sctec-pokedex.git"
+  },
+  "author": "CleberCW",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CleberCW/sctec-pokedex/issues"
+  },
+  "homepage": "https://github.com/CleberCW/sctec-pokedex#readme",
+  "dependencies": {
+    "node": "^24.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "@typescript-eslint/parser": "^8.59.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.4"
+  }
+}
