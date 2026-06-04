@@ -1,3 +1,17 @@
-const teste = 'Teste';
+import { createInterface } from 'node:readline/promises';
+import { stdin, stdout } from 'process';
 
-console.log(teste);
+import { menuController } from './controllers/controllr.js';
+
+async function main() {
+  let running = true;
+  const interfaceConsole = createInterface(stdin, stdout);
+
+  while (running) {
+    running = await menuController(interfaceConsole);
+  }
+
+  interfaceConsole.close();
+}
+
+await main();

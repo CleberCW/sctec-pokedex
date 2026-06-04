@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
+    "target": "ES2022",
+    "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "types": ["node"], // <- novo TS 6 obrigatório
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -15,6 +16,6 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"], // Padrão GLOB
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
