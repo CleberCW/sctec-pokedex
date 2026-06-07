@@ -15,6 +15,7 @@ const gifPath = path.join(__dirname, '../img/pokeball.gif');
 const pokeballPath = path.join(__dirname, '../img/pokeball.png');
 
 if (process.env.TERM_PROGRAM === 'vscode') {
+  //Fix VSCode terminal bug whe displaying the Unicode images
   process.env.TERM = 'xterm-256color';
   delete process.env.TERM_PROGRAM;
 }
