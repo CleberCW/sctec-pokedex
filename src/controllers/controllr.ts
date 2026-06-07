@@ -63,7 +63,7 @@ export async function menuController(
           'Digite o nome ou ID do Pokemon que deseja remover do seu catálogo: \n',
         );
 
-        catalogo.remover(inputPokemon);
+        catalogo.remover(inputPokemon.toLowerCase());
         break;
       }
       case '4':
